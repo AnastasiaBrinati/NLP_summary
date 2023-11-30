@@ -1,0 +1,36 @@
+\usepackage{amsmath}
+
+\chapter{Rappresentazioni dei simboli in vettori}
+
+\section{Introduzione}
+Il linguaggio naturale è una rappresentazione simbolica della conoscenza umana, e la composizione di simboli in parole e delle parole in frasi segue le regole che l'ascoltatore e il parlante conoscono. Ad oggi, con l'avanzamento del ML, i simboli discreti stanno scomparendo per essere sostituiti da vettori e tensori: si hanno dunque le cosiddette \textbf{rappresentationi distribuite o distribuzionali}, in cui parole e frasi sono rappresentate come vettori o tensori di numeri reali, e i simboli discreti sopravvivono solo come input e output degli algoritmi. \\
+Tuttavia vi è un legame tra le rappresentazioni distribuite e i simboli, in quanto la prima è una approssimazione dei secondi. 
+
+\section{Rappresentazioni Distribuite e Simboliche: Interpretabilità e Composizionalità Concatenativa}
+Le \textbf{rappresentazioni distribuite} portano le espressioni simboliche in spazi metrici dove la similarità tra esempi è usata per apprendere regolarità usando algoritmi di machine learning. Date due espressioni simboliche dunque, la loro rappresentazione distribuita dovrebbe cogliere la loro similarità e alcune loro feature. \\\\\textbf{Esempio.} Consideriamo due frasi, \textit{s1="un topo mangia il formaggio"} ed \textit{s2="Un gatto mangia il topo"}, ci sono varie similarità, come numero di parole in comune e realizzazione del patter ANIMALE MANGIA CIBO. Il punto chiave è scegliere o far scegliere a un algoritmo quale sia la migliore rappresentazione per un task specifico.\\\\
+Nonostante le rappresentazioni distribuite stiano rimpiazzando le rappresentazioni simboliche discrete, queste sono meno interpretabili dagli umani, dunque dovremmo considerare alcune delle proprietà delle rappresentazioni simboliche potrebbero tornare utili.\\
+Innanzitutto le rappresentazioni simboliche discrete sono interpretabili dagli umani perchè i simboli non sono alterati nelle espressioni: un insieme infinito di espressioni può essere ottenuto concatenando un \textbf{insieme finito di simboli di base} in accordo a delle regole di concatenazione, processo durante il quale i simboli non vengono alterati. Usando il principio della \textbf{composizionalità semantica}, il significato delle espressioni può essere ottenuto combinando il significato delle varie parti, e ricorsivamente combinando il significato dell'insieme finito di simboli di base. 
+\\\\
+\textbf{Esempio.} Sia un insieme di simboli di base \textit{D={mouse,cat,a,swallows,(,)}}, allora plausibili espressioni potrebbero essere del tipo:
+\begin{itemize}
+    \item $s_1$="a cat swallows a mouse"
+    \item $t_1$=((a cat)(swallows(a mouse)))
+\end{itemize}dove la seconda è una rappresentazione strutturata ad albero in forma parentetica.\\\\
+
+Le rappresentazioni distribuite però sembrano alterare i simboli quando vengono applicate a input simbolici, e dunque sono meno interpretabili, dal momento che i simboli vengono convertiti in vettori o tensori, che a loro volta vengono trasformati con moltiplicazioni tra matrici o con funzioni non lineari. Sorge dunque il dubbio di quale sia la relazione tra i simboli iniziali e le espressioni delle loro rappresentazioni distribuite, e come queste espressioni vengano modificate durante le operazioni tra matrici o con funzioni nonlineari. \\
+La domanda che ci poniamo è dunque se le rappresentazioni distribuite e quelle simboliche siano diverse per via dell'alterazione dei simboli. Per contribuire alla risposta, \textit{Gelder(1990)} ha formalizzato questa proprietà di alterare i simboli con due nozioni di composizionalità: \textbf{composizionalità concatenativa} e \textbf{composizionalità funzionale}.
+
+\subsection{Composizionalità concatenativa}
+La composizionalità \textit{concatenativa} spiega in che modo le rappresentazioni dei simboli discreti compongano simboli per ottenere espressioni. Infatti, il modo di combinare simboli è quello di estendere il concetto di \textit{giustapposizione} che fornisce un metodo per connettere simboli consecutivi senza alterarli e formare espressioni. Usando l'\textbf{operatore di concatenazione}, le due frasi sopra diventano: $a \cdot cat \cdot swallows \cdot a \cdot cat$, e $\cdot(\cdot(a,cat),\cdot(swallows,\cdot(a,mouse)))$ che rappresenta un albero. 
+
+\subsection{Composizionalità funzionale}
+La composizionalità funzionale spiega la composizionalità nelle rappresentazioni distribuite e nella semantica. Nella composizionalità funzionale, il modo di combinazione è una \textbf{funzione $\Phi$} che dà un processo generale per produrre espressioni dati i suoi costituenti. \\
+Le \textbf{local distributed representations} e le \textbf{one-hot encodings} sono il miglior modo per vedere come la \textit{composizionalità funzionale} agisce sulle \textit{rappresentazioni distribuite}. Ricordiamo che dato un insieme di simboli $D$, una rappresentazione distribuita locale mappa l'i-imo simbolo nell'i-imo vettore canonico di $R^N$, dove N è la cardinalità di D.Nella composizionalità funzionale, espressioni del tipo $s=w_1w_w...w_k$ sono ottenute con una funzione $\Phi$ applicata ai vettori $e_{w_1}...e_{w_{k}}$, e questa funzione potrebbe anche essere la semplice somma, che ci dà come risultato un vettore \textbf{bag-of-word}, ma ci sono anche funzioni più complesse, come la \textit{convoluzione circolare}; così però si perde la sequenza dei simboli. Oppure, il \textit{prodotto scalare} tra due espressioni $s_1, s_2$ restituisce il numero di parole in comune. In generale, la funzione $\Phi$ è cruciale per determinare se i simboli saranno riconosciuti e la sequenza preservata. 
+\\ \\ 
+Le \textit{rappresentazioni distribuite} sono più ambiziose delle \textit{rappresentazioni distribuite locali} perchè cercano si codificare simboli base di $D$ in vettori di $R^d$ dove d è molto minore di n, anche se così si alterano i simboli, data la assenza di link tra simboli e rappresentazioni. In generale, data la rappresentazione locale $\textbf{e}_w$ di un simbolo $w$, l'encoder di una \textit{rappresentazione distribuita} è una matrice $\textbf{W}_{dxn}$ che trasforma $e_w$ in $y_w=W_{dxn}e_w$. In una \textit{rappresentazione distribuita} il contenuto informativo è \textbf{distribuito} tra \textbf{più unità}, ed allo stesso tempo ogni unità può contribuire alla rappresentazione di più elementi. 
+I due vantaggi della rappresentazione distribuita rispetto alla rappresentazione distribuita locale sono che è più efficiente e non tratta ogni elemento come diverso allo stesso modo con ogni altro elemento. Il contro è che i simboli sono alterati e dunque difficili da interpretare. \\ 
+Anche per le rappresentazioni dsitribuite è possibile definire \textbf{composizioni funzionali} per rappresenare espressioni. In generale, l'interpretabilità può essere a due livelli:
+\begin{itemize}
+    \item \textbf{Symbol-level interpretability}: E' possibile riconoscere simboli discreti? Ovvero, a che livello la matrice di embedding $W$ è invertibile?
+    \item \textbf{Sequence-level Interpretability}: é possibile riconoscere i simboli e le loro relazioni in una sequenza di simboli? Ovvero, quanto sono concatenativi i modelli di composizione funzionale?
+\end{itemize}
